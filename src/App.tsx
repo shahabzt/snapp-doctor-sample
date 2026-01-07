@@ -1,13 +1,13 @@
-
-import './App.css'
+import "./App.css";
+import Main from "./pages/main";
 
 function App() {
 
   return (
     <>
-     snapp doctor sample app
+      <Main />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
