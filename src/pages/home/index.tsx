@@ -1,12 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
 
-import styles from "./main.module.css";
 import { generateMockData } from "../../data/generateMockData";
-import { useCachedFilter } from "../../hooks/useCachedFilter";
 import { Filters, SearchInput, VirtualizedList } from "../../components";
+import { useCachedFilter } from "../../hooks/useCachedFilter";
 import { useDebounce } from "../../hooks/useDebounce";
 
-export default function Main() {
+import styles from "./homePage.module.css";
+
+export default function HomePage() {
   const [searchText, setSearchText] = useState("");
   const debouncedSearchText = useDebounce(searchText, 1000);
 
