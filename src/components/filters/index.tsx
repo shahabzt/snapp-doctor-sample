@@ -1,4 +1,5 @@
-import styles from "./Filters.module.css";
+import { CATEGORIES } from "../../data/generateMockData";
+import styles from "./filters.module.css";
 
 export default function Filters() {
   return (
@@ -7,18 +8,19 @@ export default function Filters() {
         <label className={styles.label}>Category</label>
         <select className={styles.select}>
           <option value="">All</option>
-          <option value="doctor">Doctor</option>
-          <option value="dentist">Dentist</option>
-          <option value="clinic">Clinic</option>
-          <option value="lab">Lab</option>
+          {CATEGORIES.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
         </select>
       </div>
 
       <div className={styles.group}>
         <label className={styles.label}>Price Range</label>
         <div className={styles.priceRange}>
-          <input type="number" placeholder="Min" className={styles.input} />
-          <input type="number" placeholder="Max" className={styles.input} />
+          <input maxLength={3} type="number" placeholder="Min" className={styles.input} />
+          <input maxLength={3} type="number" placeholder="Max" className={styles.input} />
         </div>
       </div>
 
