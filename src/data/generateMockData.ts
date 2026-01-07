@@ -1,6 +1,14 @@
 import type { Item, ItemStatus } from "../types/item.types";
 
-const CATEGORIES = ["doctor", "dentist", "clinic", "lab"] as const;
+export const CATEGORIES = [
+  "general doctor",
+  "dentist",
+  "psychologist",
+  "Pharmacist",
+  "orthopedist",
+  "pediatrician",
+] as const;
+
 const NAME = [
   "Ali",
   "Sara",
