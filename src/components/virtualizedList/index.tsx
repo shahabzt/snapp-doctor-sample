@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { Item } from "../../types/item.types";
 import styles from "./virtualizedList.module.css";
 
@@ -5,7 +6,7 @@ interface VirtualizedListProps {
   items: Item[];
 }
 
-export default function VirtualizedList({ items }: VirtualizedListProps) {
+function VirtualizedListComponent({ items }: VirtualizedListProps) {
   return (
     <div className={styles.container}>
       <div className={styles.inner}>
@@ -25,3 +26,5 @@ export default function VirtualizedList({ items }: VirtualizedListProps) {
     </div>
   );
 }
+
+export default memo(VirtualizedListComponent);
