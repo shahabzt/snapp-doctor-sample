@@ -1,26 +1,36 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import styles from "./searchInput.module.css";
 
 interface SearchInputProps {
   onSearch: (value: string) => void;
+  initialValue: string;
 }
 
-export default function SearchInput({ onSearch }: SearchInputProps) {
-  const [inputValue, setInputValue] = useState("");
+function SearchInputComponent({ onSearch, initialValue }: SearchInputProps) {
+  const [inputValue, setInputValue] = useState(initialValue);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
-    onSearch(value);
+   
   };
 
+  const handleClick = ()=>{
+    onSearch(inputValue)
+  }
+
   return (
-    <input
-      value={inputValue}
-      onChange={handleChange}
-      type="text"
-      placeholder="Search by name..."
-      className={styles.input}
-    />
+    <div className={styles.container}>
+      <input
+        type="text"
+        placeholder="Search by name..."
+        value={inputValue}
+        onChange={handleChange}
+        className={styles.input}
+      />
+      <button className={styles.button} onClick={handleClick}>search</button>
+    </div>
   );
 }
+
+export default memo(SearchInputComponent);

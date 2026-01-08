@@ -1,9 +1,22 @@
 .input {
   padding: 8px;
   font-size: 14px;
-  margin-bottom: 10px;
   border-radius: 4px;
   border: 1px solid #ccc;
   width: 100%;
   box-sizing: border-box;
+  height: 48px;
+}
+
+.button{
+  background-color: gray;
+  width: 100px;
+  margin: 16px 0;
+  height: 48px;
+}
+
+.container{
+  display: flex;
+  gap: 16px;
+  align-items: center;
 }
