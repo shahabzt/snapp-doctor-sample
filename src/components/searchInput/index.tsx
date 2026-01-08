@@ -12,7 +12,9 @@ function SearchInputComponent({ onSearch, initialValue }: SearchInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
-   
+   if(!value){
+    onSearch("")
+   }
   };
 
   const handleClick = ()=>{
