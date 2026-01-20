@@ -7,6 +7,7 @@ interface VirtualizedListProps {
 }
 
 function VirtualizedListComponent({ items }: VirtualizedListProps) {
+ 
   return (
     <div className={styles.container}>
       <div className={styles.inner}>

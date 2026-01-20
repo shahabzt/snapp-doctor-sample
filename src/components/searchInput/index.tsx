@@ -1,38 +1,41 @@
-import { memo, useState } from "react";
+import { forwardRef } from "react";
 import styles from "./searchInput.module.css";
 
 interface SearchInputProps {
   onSearch: (value: string) => void;
-  initialValue: string;
 }
 
-function SearchInputComponent({ onSearch, initialValue }: SearchInputProps) {
-  const [inputValue, setInputValue] = useState(initialValue);
+const SearchInputComponent = forwardRef<HTMLInputElement, SearchInputProps>(
+  ({ onSearch }, ref) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setInputValue(value);
-   if(!value){
-    onSearch("")
-   }
-  };
+      if (ref && typeof ref !== "function" && ref.current) {
+        onSearch(ref.current.value);
+      }
+    };
 
-  const handleClick = ()=>{
-    onSearch(inputValue)
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.value === "") {
+        onSearch("");
+      }
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className={styles.container}>
+        <input
+          ref={ref}
+          type="text"
+          onChange={handleChange}
+          placeholder="Search by name..."
+          className={styles.input}
+        />
+        <button type="submit" className={styles.button}>
+          Search
+        </button>
+      </form>
+    );
   }
+);
 
-  return (
-    <div className={styles.container}>
-      <input
-        type="text"
-        placeholder="Search by name..."
-        value={inputValue}
-        onChange={handleChange}
-        className={styles.input}
-      />
-      <button className={styles.button} onClick={handleClick}>search</button>
-    </div>
-  );
-}
-
-export default memo(SearchInputComponent);
+export default SearchInputComponent;

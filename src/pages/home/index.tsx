@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 import { generateMockData } from "../../data/generateMockData";
 import {
@@ -9,27 +9,33 @@ import {
   VirtualizedList,
 } from "../../components";
 import { useDebounce } from "../../hooks/useDebounce";
-import { applyFilters } from "../../utils/applyFilters";
-
 import type { FiltersTypes } from "../../types/filters.types";
-import type { Item } from "../../types/item.types";
 
 import styles from "./homePage.module.css";
+import { applyFilters } from "../../utils/applyFilters";
+import type { Item } from "../../types/item.types";
 
 export default function HomePage() {
- const [filters, setFilters] = useState<FiltersTypes & { search: string }>({
-  category: null,
-  status: null,
-  minPrice: null,
-  maxPrice: null,
-  search: "",
-});
+  const [filters, setFilters] = useState<FiltersTypes & { search: string }>({
+    category: null,
+    status: null,
+    minPrice: null,
+    maxPrice: null,
+    search: "",
+  });
 
+  const searchRef = useRef<HTMLInputElement | null>(null);
+  const priceRef = useRef<{
+    min: HTMLInputElement | null;
+    max: HTMLInputElement | null;
+  }>({
+    min: null,
+    max: null,
+  });
   const debouncedMinPrice = useDebounce(filters.minPrice);
   const debouncedMaxPrice = useDebounce(filters.maxPrice);
-  const debouncedSearch = useDebounce(filters.search)
-
-  const items = useMemo(() => generateMockData(50), []);
+  const debouncedSearch = useDebounce(filters.search);
+  const items = useMemo(() => generateMockData(5000), []);
 
   const filteredItems = useMemo(() => {
     let filtered = applyFilters(items, {
@@ -77,16 +83,12 @@ export default function HomePage() {
           value={filters.category}
           onChange={handleCategoryChange}
         />
-        <PriceFilter
-          min={filters.minPrice}
-          max={filters.maxPrice}
-          onChange={handlePriceChange}
-        />
+        <PriceFilter ref={priceRef} onChange={handlePriceChange} />
         <StatusFilter value={filters.status} onChange={handleStatusChange} />
       </div>
 
       <div className={styles.right}>
-        <SearchInput onSearch={handleSearch} initialValue={""} />
+        <SearchInput onSearch={handleSearch} ref={searchRef} />
         <VirtualizedList items={filteredItems} />
       </div>
     </div>

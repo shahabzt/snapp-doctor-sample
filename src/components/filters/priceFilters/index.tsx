@@ -1,43 +1,64 @@
-
-import { memo } from "react";
+import {  forwardRef, useRef, useImperativeHandle } from "react";
 import styles from "./priceFilters.module.css";
 
 interface PriceFilterProps {
-  min: number | null;
-  max: number | null;
   onChange: (min: number | null, max: number | null) => void;
 }
 
-function PriceFilterComponent({ min, max, onChange }: PriceFilterProps) {
-  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value ? Number(e.target.value) : null, max);
-  };
-
-  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(min, e.target.value ? Number(e.target.value) : null);
-  };
-
-  return (
-    <div className={styles.group}>
-      <label className={styles.label}>Price Range</label>
-      <div className={styles.priceRange}>
-        <input
-          maxLength={3}
-          type="number"
-          placeholder="Min"
-          className={styles.input}
-          onChange={handleMinChange}
-        />
-        <input
-          maxLength={3}
-          type="number"
-          placeholder="Max"
-          className={styles.input}
-          onChange={handleMaxChange}
-        />
-      </div>
-    </div>
-  );
+export interface PriceRefs {
+  min: HTMLInputElement | null;
+  max: HTMLInputElement | null;
 }
 
-export default memo(PriceFilterComponent);
+const PriceFilterComponent = forwardRef<PriceRefs, PriceFilterProps>(
+  ({ onChange }, ref) => {
+    const minRef = useRef<HTMLInputElement | null>(null);
+    const maxRef = useRef<HTMLInputElement | null>(null);
+
+    useImperativeHandle(ref, () => ({
+      min: minRef.current,
+      max: maxRef.current,
+    }));
+
+    const handleChange = () => {
+      const minValue = minRef.current?.value ?? "";
+      const maxValue = maxRef.current?.value ?? "";
+
+      if (!minValue && !maxValue) {
+        onChange(null, null);
+        return;
+      }
+
+      onChange(
+        minValue ? Number(minValue) : null,
+        maxValue ? Number(maxValue) : null
+      );
+    };
+
+    return (
+      <div className={styles.group}>
+        <label className={styles.label}>Price Range</label>
+
+        <div className={styles.priceRange}>
+          <input
+            ref={minRef}
+            type="number"
+            placeholder="Min"
+            className={styles.input}
+            onChange={handleChange}
+          />
+
+          <input
+            ref={maxRef}
+            type="number"
+            placeholder="Max"
+            className={styles.input}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
+    );
+  }
+);
+
+export default PriceFilterComponent;
